@@ -1,7 +1,7 @@
 export default function Index() {
   return (
-    <div>
-      <h1>Welcome to Star Wars Wiki</h1>
+    <div className="p-6">
+      <h1 className="text-2xl">Welcome to Star Wars Wiki</h1>
     </div>
   );
 }
