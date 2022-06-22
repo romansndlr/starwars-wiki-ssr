@@ -1,12 +1,11 @@
 import { FilmIcon } from "@heroicons/react/solid";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { last, compact } from "lodash";
-import { NavLink, Outlet } from "react-router-dom";
 
 interface Planet {
   climate: string;
@@ -51,6 +50,7 @@ export default function Planets() {
             return (
               <li key={planet.name}>
                 <NavLink
+                  prefetch="intent"
                   className={({ isActive }) =>
                     clsx(
                       "relative flex justify-between py-5 pl-4 pr-6 hover:bg-gray-50 sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6",
