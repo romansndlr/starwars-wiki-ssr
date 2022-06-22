@@ -1,5 +1,5 @@
 import { FilmIcon } from "@heroicons/react/solid";
-import type { LoaderFunction } from "@remix-run/node";
+import type { HeadersFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import axios from "axios";
@@ -27,7 +27,20 @@ interface Planet {
 export const loader: LoaderFunction = async () => {
   const { data } = await axios.get("/planets");
 
-  return json({ planets: data });
+  return json(
+    { planets: data },
+    {
+      headers: {
+        "Cache-Control": "max-age=60000",
+      },
+    }
+  );
+};
+
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  return {
+    "Cache-Control": loaderHeaders.get("Cache-Control") || "",
+  };
 };
 
 export default function Planets() {

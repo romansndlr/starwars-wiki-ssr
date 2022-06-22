@@ -1,5 +1,5 @@
 import { FilmIcon } from "@heroicons/react/solid";
-import type { LoaderFunction } from "@remix-run/node";
+import type { HeadersFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import axios from "axios";
@@ -29,7 +29,20 @@ interface Person {
 export const loader: LoaderFunction = async () => {
   const { data } = await axios.get("/people");
 
-  return json({ people: data });
+  return json(
+    { people: data },
+    {
+      headers: {
+        "Cache-Control": "max-age=60000",
+      },
+    }
+  );
+};
+
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  return {
+    "Cache-Control": loaderHeaders.get("Cache-Control") || "",
+  };
 };
 
 export default function People() {

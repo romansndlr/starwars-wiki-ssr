@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { HeadersFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import axios from "axios";
@@ -7,7 +7,20 @@ import { capitalize } from "lodash";
 export const loader: LoaderFunction = async ({ params }) => {
   const { data } = await axios.get(`/planets/${params.planetId}`);
 
-  return json({ planet: data });
+  return json(
+    { planet: data },
+    {
+      headers: {
+        "Cache-Control": "max-age=60000",
+      },
+    }
+  );
+};
+
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  return {
+    "Cache-Control": loaderHeaders.get("Cache-Control") || "",
+  };
 };
 
 export default function Planet() {
